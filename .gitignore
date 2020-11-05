@@ -3,3 +3,5 @@
 **.iml
 node_modules
 src/config/constants.ts
+
+discord-oauth2/src/config/constants.ts
