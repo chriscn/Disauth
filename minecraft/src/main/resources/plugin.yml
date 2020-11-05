@@ -1,0 +1,4 @@
+name: Disauth
+version: ${project.version}
+main: github.chriscn.Disauth
+api-version: 1.16
