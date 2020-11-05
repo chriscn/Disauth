@@ -23,17 +23,25 @@ app.get('/auth/discord', (req, res) => {
 })
 
 app.get('/auth/discord/callback', (req, res) => {
-  discordAuth.code.getToken(req.originalUrl)
-    .then(user => {
-      console.log(user)
+  if (req.params || req.query) {
+    discordAuth.code.getToken(req.originalUrl).then(user => {
+      var code = user;
 
-      user.refresh().then(updatedUser => {
-        console.log(updatedUser !== user) //=> true
-        console.log(updatedUser.accessToken)
-      });
+      if(user.expired()) {
+        user.refresh().then(newToken => {
+          code = newToken;
+        })
+      }
+
+      console.log(code)
+      res.sendStatus(200)
+    }).catch(error => {
+      console.error(error)
+      return res.redirect('/auth/discord')
     })
-
-    res.send(200)
+  } else {
+    res.redirect('/auth/discord')
+  }
 });
 
 app.listen(PORT, () => {
